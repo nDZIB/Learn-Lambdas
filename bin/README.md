@@ -16,7 +16,7 @@
 		4.  Optional optional parenthesis around parameters, except otherwise, more than one
 		 parameter are specified.
 	
--	Lambdas are implementations of interfaces (specifically single abstract method (SAM) interfaces otherwise known as functional interfaces)
+-	Lambdas are implementations of interfaces (specifically single method interfaces)
 
 
 #** Day two (Tuesday, 3 September 2019)
