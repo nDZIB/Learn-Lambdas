@@ -18,15 +18,6 @@
 	
 -	Lambdas are implementations of interfaces (specifically single method interfaces)
 
-#* Getting up to speed
-	a. Method References: As the name imply, references to methods, within the lambda. 3 Kinds
-		1. Static Referencing: Referencing static methods e.g. 
-		--	MyList l = new MyList();
-		-- l.forEach(System.out::println);
-		The static method println of System.out.println is called for each element of my list(to 
-		display the element). note the "::"
-		2. 
-
 
 #** Day two (Tuesday, 3 September 2019)
 
