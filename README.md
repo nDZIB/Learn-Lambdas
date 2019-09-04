@@ -22,17 +22,20 @@
 #** Day two (Tuesday, 3 September 2019)
 
 -	Consumer functional interface
+
 	1.	using the accept(T t) abstract method and the andThen(Consumer<T> t) default method
 -	Predicate functional interface
+
 	1.	Used the test(T t) abstract method
 	2. used the negate() default instance method
 	3. used the and(Predicate<T> t) default method + java's "fail fast" i.e Objects.requireNotNull
 	. Created own Predicate interface, implementing above methods plus an XOR
 -	Comparator functional interface
+
 	1.	compare (T t, T t) abstract method
 	2.	comparing(keyExtractor) static method
 	3. thenComparing(keyExtractor) default method
-
+-	Implemented a length conversion api, (interconverting between kilometers(km), meters(m) and centimeters(cm)
 
 #** Day three (Wednesday, 4 September 2019)
 
