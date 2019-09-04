@@ -39,6 +39,11 @@
 
 #** Day three (Wednesday, 4 September 2019)
 
+-	Streams
+	
+	1. maps and filters, flatMap (map takes one param and returns it, flatmap takes one and returns 0 or 	variable)
+	2. toMap(), toList(), groupinpBy(), reduce(identity, operation)
+
 
 #** Day four (Thursday, 5 September 2019)
 

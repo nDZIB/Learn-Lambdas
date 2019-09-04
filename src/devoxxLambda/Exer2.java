@@ -1,4 +1,4 @@
-package devoxxPractice;
+package devoxxLambda;
 
 import static org.junit.jupiter.api.Assertions.*;
 

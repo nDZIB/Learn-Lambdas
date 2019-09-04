@@ -1,4 +1,4 @@
-package devoxxPractice;
+package devoxxLambda;
 
 import java.util.Objects;
 

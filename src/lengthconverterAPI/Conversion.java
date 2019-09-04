@@ -12,12 +12,6 @@ public interface Conversion {
 
 	double to(String toUnit);
 	
-//	static BiFunction convert(double value) {
-//		return (fromUnit, toUnit) -> {
-//			return p2 -> value*fromUnit*toUnit;
-//		};
-//	}
-	
 	static BiFunction convert(double value) {
 		return (fromUnit) -> {
 			return toUnit ->  {
@@ -50,22 +44,4 @@ public interface Conversion {
 			};
 		};
 	}
-//	//new stuff
-//	
-//	interface trif {
-//		Conversion to(double input);
-//		
-//		
-//		default Conversion end(double value) {
-//		return p1 -> p1*value;
-//	}
-//	}
-//	
-//	default trif start (double value) {
-//		return (p1) -> {
-//			return (p2) -> p1*p2*value;
-//		};
-//	}
-	
-	
 }
