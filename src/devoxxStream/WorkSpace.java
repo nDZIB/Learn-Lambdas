@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -41,7 +42,11 @@ public class WorkSpace {
 //					(previous, current)-> previous+System.lineSeparator()+current));
 			
 			
-			Map<String, List<String>> words = x.collect(Collectors.groupingBy(word -> word.substring(0,1)));
+			//Map<String, List<String>> words = x.collect(Collectors.groupingBy(word -> word.substring(0,1)));
+			
+			
+			Map<String, Set<String>> words = x.flatMap(line -> Arrays.stream(line.split(" "))).collect(Collectors
+					.groupingBy(line-> line.substring(0,1), Collectors.mapping(word->word, Collectors.toSet())));
 			
 			System.out.println(words);
 			x.close();
@@ -66,6 +71,14 @@ public class WorkSpace {
 		IntUnaryOperator combined = combine(operations);
 		
 		System.out.println(combined.applyAsInt(5));
+	}
+	
+	public void leterfrequency() {
+		String [] rsource = {"a", "a", "a","d","a","q"};
+		
+		Map<String, Long> freqT = Stream.of(rsource).collect(Collectors.groupingBy(c->c, Collectors.counting()));
+		
+		System.out.println(freqT);
 	}
 
 }

@@ -1,0 +1,12 @@
+A cooking api.
+to cook a meal, you need  to
+get the ingredients and then follow the cooking procedure.
+
+the api enables one to add a recipe or retrieve the recipe for a given meal:
+
+add a recipe: Recipe.cook(meal).get(incredients).alsoGet(ingredients)....do(procedureOne).next(nextProcedure)...(done);
+
+to get a recipe: Recipe.retrieveProcedure(meal).retrieve()
+
+
+
