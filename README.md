@@ -47,5 +47,9 @@
 
 #** Day four (Thursday, 5 September 2019)
 
+-	Recipe api
+
 
 #** Day five (Friday, 6 September 2019)
+
+-	Started transforming the login service of the todo system (built within the lessons) to use lambdas

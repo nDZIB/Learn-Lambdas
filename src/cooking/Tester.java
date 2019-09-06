@@ -49,7 +49,7 @@ public class Tester {
 					.filter(line -> line.split(" ")[1].equalsIgnoreCase("add"))//use string formatting, in order to remove puntuations
 					.collect(Collectors.toList())
 					.forEach(System.out::println);	
-		//Recipe.getRecipes("Add").retrieve().forEach(System.out::println);
+		Recipe.getRecipes("Add").retrieve().forEach(System.out::println);
 		
 	}
 
