@@ -53,3 +53,14 @@
 #** Day five (Friday, 6 September 2019)
 
 -	Started transforming the login service of the todo system (built within the lessons) to use lambdas
+
+
+
+
+
+
+#WEEK TWO
+
+#** Day one (Monday, 09 September 2019)
+
+- More practice on lambda expressions
