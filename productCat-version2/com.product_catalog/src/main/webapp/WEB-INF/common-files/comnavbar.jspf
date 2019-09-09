@@ -1,0 +1,15 @@
+<nav class="navbar navbar-inverse">
+	<ul class="nav navbar-nav">
+		<li><a href="/view-catalog.pcat" class="button"> Home</a></li>
+		<li><a href="/view-exp-catalog.pcat" class="button">Explicit
+				View</a></li>
+		<li><a href="/modify-product.pcat" class="button">Add
+				Product</a></li>
+		<li><a href="/modify-category.pcat" class="button">Add
+				Category</a></li>
+	</ul>
+	<ul class="nav navbar-right">
+		<li><a href="/logout.pcat">Logout</a></li>
+	</ul>
+</nav>
+<nav class="nav navabar"></nav>
