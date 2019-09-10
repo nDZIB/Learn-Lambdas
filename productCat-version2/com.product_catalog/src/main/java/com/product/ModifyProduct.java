@@ -39,8 +39,6 @@ public class ModifyProduct extends HttpServlet {
 		// handles operations to perform after the user does modifications to to a
 		// product or wishes to add a new product
 
-		ProductManagementService productMService = new ProductManagementService();
-
 		if (requestVariable.getParameter("editProduct") != null) {// code to execute if user wishes to edit product
 			if (!this.editProduct(requestVariable)) {
 				System.out.println("Unable to edit the product");
@@ -50,7 +48,7 @@ public class ModifyProduct extends HttpServlet {
 		} else if (requestVariable.getParameter("deleteProduct") != null) {// product deletion code from editing
 			Product product = (Product) requestVariable.getSession().getAttribute("product");
 
-			if (!productMService.removeProduct(product)) {
+			if (!ServiceProduct.select(product).remove()) {
 				System.out.println("Unable to delete product");
 				// may redirect to delete product
 			}
@@ -97,8 +95,6 @@ public class ModifyProduct extends HttpServlet {
 	public boolean addNewProduct(HttpServletRequest requestVariable) throws IOException, ServletException {// product
 																											// addition
 																											// code
-		ProductManagementService productMService = new ProductManagementService();
-
 		int foundID;
 		String newProductName = requestVariable.getParameter("newProductName");
 		String newProductDescription = requestVariable.getParameter("newProductDescription");
@@ -119,7 +115,7 @@ public class ModifyProduct extends HttpServlet {
 		foundID = ServiceCategories.retrieveIDFor(category).retrieve();//categoryMService.getCategoryID(category);
 
 		// first verify if the product exists
-		if (productMService.getProductID(product) == 0) {// if the product does not exist
+		if (ServiceProduct.getProductIDOf(product).get() == 0) {// if the product does not exist
 			if (foundID != 0) {// if the requested product category exists, add the product
 				if (this.doAddProduct(part, product, foundID, userID)) {
 					System.out.println("Category exists: Product was added");
@@ -154,8 +150,6 @@ public class ModifyProduct extends HttpServlet {
 
 	// method to edit an existing product
 	public boolean editProduct(HttpServletRequest requestVariable) throws IOException, ServletException {
-		ProductManagementService productMService = new ProductManagementService();
-
 		// inorder to edit product,
 		// 1 get a corresponding category id
 		// make modifications
@@ -180,8 +174,8 @@ public class ModifyProduct extends HttpServlet {
 		Product oldProduct = (Product) requestVariable.getSession().getAttribute("product");
 
 		// get categoryID and productID of the old product
-		categoryID = productMService.getCategoryID(oldProduct);// get categoryID of old product
-		productID = productMService.getProductID(oldProduct);// get productID of old product
+		categoryID = ServiceProduct.getCategoryIDOf(oldProduct).get();// get categoryID of old product
+		productID = ServiceProduct.getProductIDOf(oldProduct).get();// get productID of old product
 
 		if (productID != 0) {// the provided old product exists
 			if (categoryID != 0) {// and the provided category exists
@@ -192,17 +186,17 @@ public class ModifyProduct extends HttpServlet {
 																			// new product
 				if (newcategoryID != 0) {// if the new product has a category
 					if (part.getSize() == 0) {// if the user selects no file
-						if (productMService.editProduct(product, newcategoryID, productID)) {
+						if (ServiceProduct.saveProduct(product).inCategory(categoryID).as(productID)) {
 							System.out.println("No image inserted");
 							return true;
 						}
 					} else {// if the user selected an image
 						productView = part.getInputStream();
 						if (productView != null) {// if there is an image, edit the product, considering the image
-							if (productMService.editProduct(product, newcategoryID, productID, productView))
+							if (ServiceProduct.saveProduct(product, productView).inCategory(categoryID).as(productID))
 								return true;
 						} else {// if the image is not valid, then neglect it
-							if (productMService.editProduct(product, newcategoryID, productID)) {
+							if (ServiceProduct.saveProduct(product).inCategory(categoryID).as(productID)) {
 								System.out.println("No image inserted");
 								return true;
 							}
@@ -236,14 +230,11 @@ public class ModifyProduct extends HttpServlet {
 		return false;// return value if the new product has an error
 	}
 
-	// method to add a category, then a product
+	// method to add a category, then a product without image
 	public boolean addProductAndCategory(Product product, Category category, int userID) {
-		//CategoryManagementService categoryMService = new CategoryManagementService();
-		ProductManagementService productMService = new ProductManagementService();
-
 		int newCategoryID = ServiceCategories.addCategory(category).retrieve();//categoryMService.addCategory(category);
 		if (newCategoryID != 0) {// if the category was successfully added
-			if (!productMService.addProduct(product, newCategoryID, userID)) {// attempt to add the product
+			if (!ServiceProduct.add(product).inCategory(newCategoryID).as(userID)) {// attempt to add the product
 				System.out.println("New product was not added");
 				return false;
 			}
@@ -257,12 +248,9 @@ public class ModifyProduct extends HttpServlet {
 
 	// method to add a category and a product with an image provided
 	public boolean addProductAndCategory(Product product, Category category, InputStream productView, int userID) {
-		//CategoryManagementService categoryMService = new CategoryManagementService();
-		ProductManagementService productMService = new ProductManagementService();
-
 		int newCategoryID = ServiceCategories.addCategory(category).retrieve();
 		if (newCategoryID != 0) {// if the category was successfully added
-			if (!productMService.addProduct(product, newCategoryID, productView, userID))// attempt to add the new
+			if (!ServiceProduct.add(product, productView).inCategory(newCategoryID).as(userID))// attempt to add the new
 																					// product
 				return false;// return false if it fails
 		} else {// if the new category was not added
@@ -276,30 +264,24 @@ public class ModifyProduct extends HttpServlet {
 	// supercode to add a new product(adding the product sets a default image if no
 	// image is specified
 	public boolean doAddProduct(Part part, Product product, int foundID, int userID) throws IOException {
-
-		ProductManagementService productMService = new ProductManagementService();
-
 		InputStream productView = null;
-		if (part.getSize() > 0) {
+		if (part.getSize() > 0) {//if an image was selected
 			productView = part.getInputStream();
-			if (productView != null) // if image exists, add the new product
-				if (productMService.addProduct(product, foundID, productView, userID))
-					return true;
-				else {// add new product without image(a default image) this will hardly ever be
-						// executed though
+			if (productView == null) {// if image is invalid
+				// set the product's image as the default image
 					String pat = System.getProperty("user.dir");
 					pat = pat + "\\src\\main\\resources\\def_image.png";
 					productView = new FileInputStream(pat);
-					if (productMService.addProduct(product, foundID, productView, userID)) {
-						productView.close();
-						return true;
-					}
 				}
-		} else {// if no image was selected
+			//then add the product, with the image
+			if (ServiceProduct.add(product, productView).inCategory(foundID).as(userID))
+				return true;
+			
+		} else {// if no image was selected, just create a default image
 			String pat = System.getProperty("user.dir");
 			pat = pat + "\\src\\main\\resources\\def_image.png";
 			productView = new FileInputStream(pat);
-			if (productMService.addProduct(product, foundID, productView, userID)) {
+			if (ServiceProduct.add(product, productView).inCategory(foundID).as(userID)) {
 				productView.close();
 				return true;
 			}
@@ -328,7 +310,7 @@ public class ModifyProduct extends HttpServlet {
 
 		requestVariable.getSession().setAttribute("product", product);
 
-		if (!new ProductManagementService().removeProduct(product)) {
+		if (!ServiceProduct.select(product).remove()) {
 			return false;
 		}
 		return true;

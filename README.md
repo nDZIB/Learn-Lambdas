@@ -64,3 +64,7 @@
 #** Day one (Monday, 09 September 2019)
 
 - More practice on lambda expressions
+
+#** Day Two (Tuesday, 10 September 2019)
+
+- Continued practice on lambda expressions
